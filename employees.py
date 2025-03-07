@@ -47,19 +47,19 @@ class Employee(ABC):
         self.performance = INITIAL_PERFORMANCE
         self.happiness = INITIAL_HAPPINESS
         self._salary = salary
-    
+
     @property
     def name(self):
         return self.__name
-    
+
     @property
     def manager(self):
         return self.__manager
-    
+
     @property
     def performance(self):
         return self.performance
-    
+
     @performance.setter
     def performance(self, value):
         if value > PERCENTAGE_MIN and value < PERCENTAGE_MAX:
@@ -72,7 +72,7 @@ class Employee(ABC):
     @property
     def happiness(self):
         return self.happiness
-    
+
     @happiness.setter
     def happiness(self, value):
         if value > PERCENTAGE_MIN and value < PERCENTAGE_MAX:
@@ -81,18 +81,18 @@ class Employee(ABC):
             self.happiness = PERCENTAGE_MAX
         elif value < PERCENTAGE_MIN:
             self.happiness = PERCENTAGE_MIN
-    
+
     @property
     def salary(self):
         return self._salary
-    
+
     @salary.setter
     def salary(self, value):
         if value < 0:
             raise ValueError("SALARY_ERROR_MESSAGE")
         else:
             self._salary = value
-    
+
     @abstractmethod
     def work(self):
         pass
@@ -108,12 +108,30 @@ class Employee(ABC):
             self.relationships[other.name] -= 1
             self.happiness -= 1
 
+    def daily_expense(self):
+        self.happiness -= 1
+        self.savings -= DAILY_EXPENSE
+
+    def __str__(self):
+        return f"""{self.name}
+        \tSalary: ${self.salary}
+        \tSavings: ${self.savings}
+        \tHappiness: {self.happiness}%
+        \tPerformance: {self.performance}%"""
 # TODO: implement this class. You may delete this comment when you are done.
 class Manager(Employee):
     """
     A subclass of Employee representing a manager.
     """
-
+    def work(self):
+        adjust = random.randint(-5, 5)
+        self.performance += adjust
+        if adjust <= 0:
+            self.happiness -= 1
+            for person in self.relationships:
+                self.relationships[person] -= 1
+        else:
+            self.happiness += 1
 
 # TODO: implement this class. You may delete this comment when you are done.
 class TemporaryEmployee(Employee):
