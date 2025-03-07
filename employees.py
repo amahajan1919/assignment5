@@ -43,8 +43,8 @@ class Employee(ABC):
         self.relationships = {}
         self.savings = savings
         self.is_employed = True
-        self.name = name
-        self.manager = manager
+        self.__name = name
+        self.__manager = manager
         self.performance = INITIAL_PERFORMANCE
         self.happiness = INITIAL_HAPPINESS
         self._salary = salary
@@ -59,29 +59,19 @@ class Employee(ABC):
 
     @property
     def performance(self):
-        return self.performance
+        return self._performance
 
     @performance.setter
     def performance(self, value):
-        if value > PERCENTAGE_MIN and value < PERCENTAGE_MAX:
-            self.performance = value
-        elif value > PERCENTAGE_MAX:
-            self.performance = PERCENTAGE_MAX
-        elif value < PERCENTAGE_MIN:
-            self.performance = PERCENTAGE_MIN
+        self._performance = max(PERCENTAGE_MIN, min(PERCENTAGE_MAX, value))
 
     @property
     def happiness(self):
-        return self.happiness
+        return self._happiness
 
     @happiness.setter
     def happiness(self, value):
-        if value > PERCENTAGE_MIN and value < PERCENTAGE_MAX:
-            self.happiness = value
-        elif value > PERCENTAGE_MAX:
-            self.happiness = PERCENTAGE_MAX
-        elif value < PERCENTAGE_MIN:
-            self.happiness = PERCENTAGE_MIN
+        self._happiness = max(PERCENTAGE_MIN, min(PERCENTAGE_MAX, value))
 
     @property
     def salary(self):
@@ -90,7 +80,7 @@ class Employee(ABC):
     @salary.setter
     def salary(self, value):
         if value < 0:
-            raise ValueError("SALARY_ERROR_MESSAGE")
+            raise ValueError(SALARY_ERROR_MESSAGE)
         else:
             self._salary = value
 
@@ -115,10 +105,10 @@ class Employee(ABC):
 
     def __str__(self):
         return f"""{self.name}
-        \tSalary: ${self.salary}
-        \tSavings: ${self.savings}
-        \tHappiness: {self.happiness}%
-        \tPerformance: {self.performance}%"""
+\tSalary: ${self.salary}
+\tSavings: ${self.savings}
+\tHappiness: {self.happiness}%
+\tPerformance: {self.performance}%"""
 # TODO: implement this class. You may delete this comment when you are done.
 class Manager(Employee):
     """
@@ -177,4 +167,3 @@ class PermanentEmployee(Employee):
                 self.savings += MANAGER_BONUS
             elif other.happiness <= HAPPINESS_THRESHOLD:
                 self.happiness = max(0, self.happiness - 1)
-
