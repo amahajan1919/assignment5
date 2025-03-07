@@ -141,10 +141,10 @@ class TemporaryEmployee(Employee):
         change = random.randint(-15, 15)
         self.performance += change
 
-        if change <= 0:
-            self.happiness -= 2
-        else:
+        if change > 0:
             self.happiness += 1
+        else:
+            self.happiness -= 2
 
     def interact(self, other):
         "handles interaction between employees"
@@ -158,7 +158,9 @@ class TemporaryEmployee(Employee):
                 if other.happiness <= HAPPINESS_THRESHOLD:
                     self.salary //= 2
                     self.happiness -= 5
-                    if self.salary == 0:
+                    if self.happiness < 0:
+                        self.happiness = 0
+                    if self.salary <= 0:
                         self.is_employed = False
 
 
@@ -184,3 +186,5 @@ class PermanentEmployee(Employee):
                 self.savings += MANAGER_BONUS
             elif other.happiness <= HAPPINESS_THRESHOLD:
                 self.happiness -= 1
+                if self.happiness < 0:
+                    self.happiness = 0
