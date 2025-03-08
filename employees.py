@@ -33,7 +33,6 @@ PERCENTAGE_MIN = 0
 SALARY_ERROR_MESSAGE = "Salary must be non-negative."
 
 
-# TODO: implement this class. You may delete this comment when you are done.
 class Employee(ABC):
     """
     Abstract base class representing a generic employee in the system.
@@ -51,14 +50,26 @@ class Employee(ABC):
 
     @property
     def name(self):
+        """
+
+        name getter
+        """
         return self.__name
 
     @property
     def manager(self):
+        """
+
+        manager getter
+        """
         return self.__manager
 
     @property
     def performance(self):
+        """
+
+        performance getter
+        """
         return self._performance
 
     @performance.setter
@@ -67,6 +78,10 @@ class Employee(ABC):
 
     @property
     def happiness(self):
+        """
+
+        happiness getter
+        """
         return self._happiness
 
     @happiness.setter
@@ -75,6 +90,10 @@ class Employee(ABC):
 
     @property
     def salary(self):
+        """
+
+        salary getter
+        """
         return self._salary
 
     @salary.setter
@@ -86,9 +105,16 @@ class Employee(ABC):
 
     @abstractmethod
     def work(self):
-        pass
+        """
+
+        abstract method for work
+        """
 
     def interact(self, other):
+        """
+
+        Simulates an interaction between this employee and another employee
+        """
         if other.name not in self.relationships:
             self.relationships[other.name] = 0
         if self.relationships[other.name] > RELATIONSHIP_THRESHOLD:
@@ -100,6 +126,10 @@ class Employee(ABC):
             self.happiness -= 1
 
     def daily_expense(self):
+        """
+
+        Simulates the employee’s daily expenses by reducing their happiness and savings
+        """
         self.happiness -= 1
         self.savings -= DAILY_EXPENSE
 
@@ -109,7 +139,7 @@ class Employee(ABC):
 \tSavings: ${self.savings}
 \tHappiness: {self.happiness}%
 \tPerformance: {self.performance}%"""
-# TODO: implement this class. You may delete this comment when you are done.
+
 class Manager(Employee):
     """
     A subclass of Employee representing a manager.
@@ -136,7 +166,7 @@ class TemporaryEmployee(Employee):
         "handles interaction between employees"
         super().interact(other)
 
-        if other.name == self.manager.name:
+        if self.manager and other.name == self.manager.name:
             if other.happiness > HAPPINESS_THRESHOLD and \
                 self.performance >= TEMP_EMPLOYEE_PERFORMANCE_THRESHOLD:
                 self.savings += MANAGER_BONUS
@@ -161,7 +191,7 @@ class PermanentEmployee(Employee):
         'interaction btwn employees'
         super().interact(other)
 
-        if other.name == self.manager.name:
+        if self.manager and other.name == self.manager.name:
             if other.happiness > HAPPINESS_THRESHOLD and \
                 self.performance > PERM_EMPLOYEE_PERFORMANCE_THRESHOLD:
                 self.savings += MANAGER_BONUS
