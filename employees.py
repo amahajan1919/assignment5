@@ -46,7 +46,7 @@ class Employee(ABC):
         self.__manager = manager
         self.performance = INITIAL_PERFORMANCE
         self.happiness = INITIAL_HAPPINESS
-        self.salary = max(0, salary)
+        self.salary = salary
 
     @property
     def name(self):
