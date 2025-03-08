@@ -46,7 +46,7 @@ class Employee(ABC):
         self.__manager = manager
         self.performance = INITIAL_PERFORMANCE
         self.happiness = INITIAL_HAPPINESS
-        self._salary = salary
+        self.salary = max(0, salary)
 
     @property
     def name(self):
@@ -100,8 +100,7 @@ class Employee(ABC):
     def salary(self, value):
         if value < 0:
             raise ValueError(SALARY_ERROR_MESSAGE)
-        else:
-            self._salary = value
+        self._salary = value
 
     @abstractmethod
     def work(self):
@@ -191,9 +190,8 @@ class PermanentEmployee(Employee):
         'interaction btwn employees'
         super().interact(other)
 
-        if self.manager and other.name == self.manager.name:
-            if other.happiness > HAPPINESS_THRESHOLD and \
-                self.performance > PERM_EMPLOYEE_PERFORMANCE_THRESHOLD:
+        if self.manager and other == self.manager:
+            if other.happiness > HAPPINESS_THRESHOLD and self.performance > 25:
                 self.savings += MANAGER_BONUS
             elif other.happiness <= HAPPINESS_THRESHOLD:
                 self.happiness = max(0, self.happiness - 1)
